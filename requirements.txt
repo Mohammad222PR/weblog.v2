@@ -1,0 +1,19 @@
+#__General modules__#
+Django==4.2.6
+python-decouple==3.8
+djangorestframework
+Pillow
+django-cleanup
+
+#__third party modules__#
+markdown       
+django-filter
+drf-yasg[validation]
+djangorestframework-simplejwt
+django-cors-headers
+djoser
+
+#__delployment modules__#
+
+#__email third_party modules__#
+django-mail-templated
