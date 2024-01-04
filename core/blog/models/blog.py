@@ -30,4 +30,8 @@ class Blog(models.Model):
     )
     category = models.ForeignKey(Category, related_name="blog", on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag, related_name="blog")
-
+    created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_time = models.DateTimeField(auto_now=True, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
