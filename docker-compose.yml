@@ -1,6 +1,16 @@
 version: '3.9'
 
 services:
+
+  redis:
+    container_name: redis1
+    image: redis
+    command: redis-server --save 60 1 --loglevel warning
+    ports:
+      - "6379:6379"
+    restart: always
+
+
   backend:
     build: .
     container_name: backend_django
@@ -9,7 +19,8 @@ services:
       - "8000:8000" 
     volumes:
       - ./core:/app
-
+    depends_on:
+      - redis
 # smtp4dev service for hande confrim which email   
   smtp4dev:
     image: rnwood/smtp4dev:v3
