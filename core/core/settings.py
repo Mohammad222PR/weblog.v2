@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 APPS = [
     "accounts.apps.AccountsConfig",
-    
+    "blog.apps.BlogConfig",
 ]
 
 MODULE = [
@@ -39,8 +39,8 @@ MODULE = [
     "rest_framework",
     "rest_framework_simplejwt",
     "mail_templated",
-
-
+    "django_redis",
+    "ckeditor",
 ]
 
 
@@ -146,3 +146,42 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # __USER_CONFIG__#
 AUTH_USER_MODEL = "accounts.User"
+
+# __REST_FRAMEWORK_SETTINGS__#
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
+
+
+# __REDIS_CONFIG__#
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+# __Smtp4Dev_Config__#
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = False
+EMAIL_HOST = "smtp4dev"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_PORT = 25
+
+
+# __JWT__#
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}

@@ -12,8 +12,11 @@ drf-yasg[validation]
 djangorestframework-simplejwt
 django-cors-headers
 djoser
-
+django-ckeditor
 #__delployment modules__#
 
 #__email third_party modules__#
 django-mail-templated
+
+#__background proccess and cache__#
+Redis

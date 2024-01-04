@@ -21,6 +21,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from django.conf import settings
 from django.conf.urls.static import static
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Snippets API",
@@ -36,8 +37,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('accounts/', include('accounts.urls', namespace='account')),
-        # Swager
+    path("accounts/", include("accounts.urls", namespace="account")),
+    # path("blog/", include("blog.urls", namespace="blog")),
+    # Swager
     # path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path(
         "",

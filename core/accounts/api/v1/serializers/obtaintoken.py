@@ -1,11 +1,11 @@
-from typing import Any, Dict
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
 )
-
+from django.contrib.auth.password_validation import validate_password
+from django.core import exceptions
 
 class CustomAuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField(label=_("Email"), write_only=True)
@@ -49,10 +49,10 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 
 
 class CustomAuthPairTokenSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
+    def validate(self, attrs):
         validate_data = super().validate(attrs)
 
-        if not self.user.is_verified():
+        if not self.user.is_verified:
             raise serializers.ValidationError(
                 {"detail": "User is not verified"},
                 code="authorization",
@@ -60,3 +60,24 @@ class CustomAuthPairTokenSerializer(TokenObtainPairSerializer):
         validate_data["email"] = self.user.email
         validate_data["id"] = self.user.id
         return validate_data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=200)
+    password1 = serializers.CharField(max_length=200)
+
+    def validate(self, attrs):
+        if attrs.get("password") != attrs.get("password1"):
+            raise serializers.ValidationError("password is not mach")
+        try:
+            validate_password(attrs.get("password"))
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({'password':list(e.message)})
+
+        if not self.user.is_verified:
+            raise serializers.ValidationError(
+                {"detail": "User is not verified"},
+                code="authorization",
+            )
+        
+        return super().validate(attrs)

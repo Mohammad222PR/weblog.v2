@@ -15,6 +15,8 @@ from jwt.exceptions import (
     ExpiredSignatureError,
     InvalidSignatureError,
 )
+from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 User = get_user_model()
 
