@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models.profile import Profile, Skills
+from accounts.models.profile import *
 
 
 @admin.register(Profile)
@@ -64,4 +64,18 @@ class SkillsAdmin(admin.ModelAdmin):
     """Admin View for Skills"""
 
     list_display = ("name",)
+    search_fields = ("name",)
+
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    """Admin View for Skills"""
+
+    list_display = ("user","sub")
+    search_fields = ("user",)
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    """Admin View for Skills"""
+
+    list_display = ("name","paid",'time')
     search_fields = ("name",)

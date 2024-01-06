@@ -20,7 +20,7 @@ class Tag(models.Model):
 
 
 class Blog(models.Model):
-    author = models.ForeignKey(Profile, related_name="blog", on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name="blog", on_delete=models.CASCADE)
     title = models.CharField(max_length=200, validators=[validate_blog_title])
     body = RichTextField()
     slug = models.SlugField(max_length=30, validators=[validate_blog_slug])
@@ -32,7 +32,17 @@ class Blog(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_time = models.DateTimeField(auto_now=True, blank=True, null=True)
     is_public = models.BooleanField(default=False)
-    is_membership = models.BooleanField(default=False)
     
+    def __str__(self):
+        return self.title
+    
+class Comment(models.Model):
+    user = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments')
+    title = models.CharField(max_length=200)
+    message = models.TextField(max_length=200)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True )
+    created_time = models.DateTimeField(auto_now_add=True)
+    is_public = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
