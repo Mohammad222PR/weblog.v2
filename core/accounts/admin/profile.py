@@ -4,12 +4,13 @@ from accounts.models.profile import Profile, Skills
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "username", "email", "created_time")
+    list_display = ("user", "username", "email", "created_time",'is_1month','is_3month', 'is_1year',)
     list_filter = (
         "user",
         "username",
         "email",
         "created_time",
+        'is_1month','is_3month', 'is_1year'
     )
     fieldsets = [
         (
@@ -28,6 +29,12 @@ class ProfileAdmin(admin.ModelAdmin):
             "Skills",
             {
                 "fields": ("skills",),
+            },
+        ),
+        (
+            "membership",
+            {
+                "fields": ('is_1month','is_3month', 'is_1year',),
             },
         ),
     ]
