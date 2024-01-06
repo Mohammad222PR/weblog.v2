@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 
 
 User = get_user_model()
@@ -13,6 +12,18 @@ class Skills(models.Model):
     def __str__(self):
         return self.name
 
+class Subscription(models.Model):
+    name = models.CharField(max_length=200)
+    paid = models.IntegerField()
+    time = models.DateTimeField()
+
+    def __str__(self):
+        return self.name
+    
+class Membership(models.Model):
+    user = models.OneToOneField(User, blank=True, null=True,on_delete=models.CASCADE)
+    sub = models.OneToOneField(Subscription, on_delete=models.SET_NULL)
+    
 
 class Profile(models.Model):
     user = models.ForeignKey(User, verbose_name="user", on_delete=models.CASCADE)
@@ -28,11 +39,3 @@ class Profile(models.Model):
         return self.username
 
 
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(
-            user=instance,
-            username=instance.username,
-            email=instance.email,
-        )

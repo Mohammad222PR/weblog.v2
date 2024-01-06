@@ -1,12 +1,14 @@
 from rest_framework.response import Response
 from rest_framework import status
-from blog.serializers import *
+from ..serializers import *
 from rest_framework import generics
 from blog.models import *
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from blog.secure import *
+from ..secure import *
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 class BlogListAndCreateView(generics.GenericAPIView):
@@ -15,7 +17,7 @@ class BlogListAndCreateView(generics.GenericAPIView):
 
     def get(self, request):
         blog = Blog.objects.filter(is_public=True)
-        serializers = self.get_serializers(instance=blog, many=True)
+        serializers = self.serializer_class(instance=blog, many=True)
         return Response(data=serializers.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -30,9 +32,14 @@ class BlogListAndCreateView(generics.GenericAPIView):
 
 
 class BlogDetailAndUpdateView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadonly]
+    permission_classes = [
+        IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadonly,
+        IsHaveMembership,
+    ]
     parser_classes = (MultiPartParser,)
 
+    # @method_decorator(cache_page(60))
     def get(self, request, slug):
         blog = Blog.objects.get(slug=slug)
         serializers = BlogSerializer(instance=blog)

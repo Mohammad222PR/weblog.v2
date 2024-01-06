@@ -6,7 +6,7 @@ class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = "__all__"
-        read_only_fields = ("slug", "is_public", "created_at", "updated_at")
+        read_only_fields = ("slug", "is_public", "created_at", "updated_at", "is_membership")
 
     @staticmethod
     def validate_title(val):
