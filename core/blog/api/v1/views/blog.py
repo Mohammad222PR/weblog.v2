@@ -11,10 +11,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
 
-class BlogListAndCreateView(generics.GenericAPIView):
+class BlogListAndCreateView(APIView):
     serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
     parser_classes = (MultiPartParser,)
-
+    
     def get(self, request):
         blog = Blog.objects.filter(is_public=True)
         serializers = self.serializer_class(instance=blog, many=True)
@@ -35,7 +36,6 @@ class BlogDetailAndUpdateView(APIView):
     permission_classes = [
         IsAuthenticatedOrReadOnly,
         IsOwnerOrReadonly,
-        IsHaveMembership,
     ]
     parser_classes = (MultiPartParser,)
 
@@ -52,3 +52,4 @@ class BlogDetailAndUpdateView(APIView):
             serializers.save()
             return Response(data=serializers.data, status=status.HTTP_202_ACCEPTED)
         return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+

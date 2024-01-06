@@ -22,7 +22,7 @@ class Subscription(models.Model):
     
 class Membership(models.Model):
     user = models.OneToOneField(User, blank=True, null=True,on_delete=models.CASCADE)
-    sub = models.OneToOneField(Subscription, on_delete=models.SET_NULL)
+    sub = models.OneToOneField(Subscription, on_delete=models.CASCADE)
     
 
 class Profile(models.Model):
