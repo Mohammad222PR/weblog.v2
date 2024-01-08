@@ -41,6 +41,9 @@ MODULE = [
     "mail_templated",
     "django_redis",
     "ckeditor",
+    "corsheaders",
+    'django_celery_beat'
+    
 ]
 
 
@@ -63,6 +66,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -162,7 +167,7 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/2",
+        "LOCATION": "redis://redis:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -185,3 +190,9 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=2),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+# __request origins__#
+CORS_ALLOWED_ALL_ORIGINS = True
+
+# config celery
+CELERY_BROKER_URL = "redis://redis:6379/1"

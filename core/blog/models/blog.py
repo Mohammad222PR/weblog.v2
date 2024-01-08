@@ -33,7 +33,8 @@ class Blog(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_time = models.DateTimeField(auto_now=True, blank=True, null=True)
     is_public = models.BooleanField(default=False)
-
+    need_membership = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.title
 

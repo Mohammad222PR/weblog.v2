@@ -79,3 +79,11 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     list_display = ("name","paid",'time')
     search_fields = ("name",)
+
+@admin.register(Factor)
+class FactorAdmin(admin.ModelAdmin):
+    '''Admin View for Factor'''
+
+    list_display = ('user','sub','paid', 'created_time')
+    
+    

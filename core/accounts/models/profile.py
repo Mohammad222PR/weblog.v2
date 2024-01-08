@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
+from django.utils import timezone
 
 
 User = get_user_model()
@@ -20,10 +20,21 @@ class Subscription(models.Model):
     def __str__(self):
         return self.name
     
+    def is_expired(self):
+        return self.time < timezone.now()
+    
+
 class Membership(models.Model):
     user = models.OneToOneField(User, blank=True, null=True,on_delete=models.CASCADE)
     sub = models.OneToOneField(Subscription, on_delete=models.CASCADE)
     
+class Factor(models.Model):
+    user = models.OneToOneField(User, blank=True, null=True,on_delete=models.CASCADE)
+    sub = models.OneToOneField(Subscription, on_delete=models.CASCADE)
+    paid = models.IntegerField()
+    created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+
 
 class Profile(models.Model):
     user = models.ForeignKey(User, verbose_name="user", on_delete=models.CASCADE)

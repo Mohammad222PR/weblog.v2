@@ -11,3 +11,12 @@ def create_profile(sender, instance, created, **kwargs):
             username=instance.username,
             email=instance.email,
         )
+
+@receiver(post_save, sender=Membership)
+def create_factor(sender, instance, created, **kwargs):
+    if created:
+        Factor.objects.create(
+            user = instance,
+            username = instance.user.username,
+            paid = instance.sub.paid,
+        )

@@ -11,7 +11,7 @@ class CommentInline(admin.StackedInline):
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
     '''Admin View for Blog'''
-    list_display = ('author','title','body','created_time','is_public','updated_time' ,'slug', 'category')
+    list_display = ('author','title','body','created_time','is_public','updated_time' ,'slug', 'category', 'need_membership')
     list_filter = ('created_time','updated_time','is_public' ,'category','tag')
     search_fields = ('author','title','body'  ,'category')
     ordering = ('created_time','updated_time','is_public' , 'category',)

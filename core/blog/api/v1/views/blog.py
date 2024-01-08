@@ -1,7 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
 from ..serializers import *
-from rest_framework import generics
 from blog.models import *
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
@@ -9,18 +8,21 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from ..secure import *
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from blog.api.pagination import Pagination
+from blog.api.pagination import *
 
 
 class BlogListAndCreateView(APIView):
-    pagination_class = Pagination
+    pagination_class = PaginationBlog
     serializer_class = BlogSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     parser_classes = (MultiPartParser,)
-    
+
+    @method_decorator(cache_page(60))
     def get(self, request):
         blog = Blog.objects.filter(is_public=True)
-        serializers = BlogSerializer(instance=blog, many=True, context={'request':request})
+        serializers = BlogSerializer(
+            instance=blog, many=True, context={"request": request}
+        )
         return Response(data=serializers.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -35,19 +37,25 @@ class BlogListAndCreateView(APIView):
         return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class BlogDetailAndUpdateView(APIView):
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadonly,
-    ]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadonly]
     parser_classes = (MultiPartParser,)
 
-    # @method_decorator(cache_page(60))
+    @method_decorator(cache_page(60))
     def get(self, request, pk):
         blog = Blog.objects.get(pk=pk)
-        serializers = BlogSerializer(instance=blog)
-        return Response(data=serializers.data, status=status.HTTP_200_OK)
+        if blog.need_membership == True:
+            if Membership.objects.filter(user_id=request.user.id).exists():
+                serializers = BlogSerializer(
+                    instance=blog, context={"request": request}
+                )
+                return Response(data=serializers.data, status=status.HTTP_200_OK)
+
+            else:
+                return Response(
+                    {"detail": "this post need member ship but you dont have it"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
     def put(self, request, pk):
         blog = Blog.objects.get(pk=pk)
@@ -57,9 +65,12 @@ class BlogDetailAndUpdateView(APIView):
             return Response(data=serializers.data, status=status.HTTP_202_ACCEPTED)
         return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, slug):
+    def post(self, request):
         serializers = CommentSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(data={'detail':'Comment added successfully'}, status=status.HTTP_201_CREATED)
+            return Response(
+                data={"detail": "Comment added successfully"},
+                status=status.HTTP_201_CREATED,
+            )
         return Response(data=serializers.errors, status=status.HTTP_400_BAD_REQUEST)
