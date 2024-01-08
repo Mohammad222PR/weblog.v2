@@ -45,17 +45,27 @@ class BlogDetailAndUpdateView(APIView):
     def get(self, request, pk):
         blog = Blog.objects.get(pk=pk)
         if blog.need_membership == True:
-            if Membership.objects.filter(user_id=request.user.id).exists():
-                serializers = BlogSerializer(
-                    instance=blog, context={"request": request}
+            user = UserMembership.objects.filter(user=request.user).exists()
+            if user:
+                if request.user.user_membership == "Premium":
+                    serializers = BlogSerializer(
+                        instance=blog, context={"request": request}
+                    )
+                    return Response(data=serializers.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(
+                    {"detail": "yore account need premium"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
-                return Response(data=serializers.data, status=status.HTTP_200_OK)
 
             else:
                 return Response(
                     {"detail": "this post need member ship but you dont have it"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+        else:
+            serializers = BlogSerializer(instance=blog, context={"request": request})
+            return Response(data=serializers.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         blog = Blog.objects.get(pk=pk)

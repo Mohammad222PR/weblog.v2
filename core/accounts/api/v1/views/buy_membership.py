@@ -14,14 +14,14 @@ class MembershipViews(APIView):
 
     def get(self, request):
         try:
-            mem = Membership.objects.get(user=request.user)
+            mem = UserMembership.objects.get(user=request.user)
             serializer = MembershipSerializer(instance=mem)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except Membership.DoesNotExist:
             raise Response({"detail": "you are bot have membership"})
 
-    def post(self, request):
-        if not Membership.objects.filter(user=request.user).exists():
+    def put(self, request):
+        if not Membership.user_membership == 'Premium':
             serializers = self.serializer_class(data=request.data)
             if serializers.is_valid():
                 serializers.validated_data["user"] = request.user
