@@ -27,4 +27,14 @@ class CommentAdmin(admin.ModelAdmin):
     ordering = ('created_time','is_public')
     inlines = [CommentInline]
 
-    
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    '''Admin View for Category'''
+    list_display = ('title',)
+    search_fields = ('title',)
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    '''Admin View for Tag'''
+    list_display = ('title',)
+    search_fields = ('title',)

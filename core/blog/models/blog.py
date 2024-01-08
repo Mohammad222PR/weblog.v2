@@ -1,8 +1,7 @@
 from django.db import models
 from accounts.models import *
 from blog.api.validators import *
-from ckeditor.fields import RichTextField 
-
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -27,20 +26,27 @@ class Blog(models.Model):
     image = models.ImageField(
         upload_to="images/blog/image", validators=[validate_file_image]
     )
-    category = models.ForeignKey(Category, related_name="blog", on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category, related_name="blog", on_delete=models.CASCADE
+    )
     tag = models.ManyToManyField(Tag, related_name="blog")
     created_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_time = models.DateTimeField(auto_now=True, blank=True, null=True)
     is_public = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.title
-    
+
+    def snipes(self):
+        body = self.body[0:10] + "..."
+        return body
+
+
 class Comment(models.Model):
-    user = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
     title = models.CharField(max_length=200)
     message = models.TextField(max_length=200)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True )
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=False)
 

@@ -8,29 +8,48 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class PostCategorySerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+
+class PostTagSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
+
 class BlogSerializer(serializers.ModelSerializer):
-    comments = serializers.SerializerMethodField()
-    image = serializers.SerializerMethodField()
-    absolute_url = serializers.SerializerMethodField(source="absolute_url")
-    # user = serializers.SlugRelatedField(slug_field="username")
-    # category = serializers.SlugRelatedField()
-    # tag = serializers.StringRelatedField()
+    comment = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField(source="get_get_image")
+    url_post = serializers.SerializerMethodField(source="get_absolute_url")
+    author = serializers.StringRelatedField()
+    snipes = serializers.ReadOnlyField()
+    category = serializers.SlugRelatedField(
+        many=False, slug_field="title", queryset=Category.objects.all()
+    )
+    tag = serializers.SlugRelatedField(
+        many=True, slug_field="title", queryset=Tag.objects.all()
+    )
 
     class Meta:
         model = Blog
         fields = "__all__"
-        read_only_fields = (
+        read_only_fields = [
             "slug",
             "is_public",
             "created_at",
             "updated_at",
             "is_membership",
-            "user",
-        )
+            "author",
+        ]
 
-    def get_absolute_url(self, obj):
+    def get_url_post(self, obj):
         request = self.context.get("request")
-        return request.build_absolute_uri(obj.pk)
+        if request is not None:
+            return request.build_absolute_uri(obj.pk)
+        return None
 
     def get_image(self, obj):
         request = self.context.get("request")
@@ -39,7 +58,24 @@ class BlogSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(image)
         return None
 
+    def to_representation(self, instance):
+        request = self.context.get("request")
+        rep = super().to_representation(instance)
+        try:
+            if request.parser_context.get("kwargs").get("pk"):
+                rep.pop("snipes", None)
+                rep.pop("url_post", None)
+            else:
+                rep.pop("body", None)
+                rep.pop("comment", None)
+                rep.pop("image", None)
 
-    def get_comments(self, obj):
-        serializers = CommentSerializer(instance=obj.comments.all(), many=True)
-        return serializers.data
+            rep["tag"] = PostTagSerializers(instance.tag, many=True).data
+            rep["category"] = PostCategorySerializers(instance.category).data
+            return rep
+        except:
+            return None
+
+    def get_comment(self, obj):
+        ser = CommentSerializer(instance=obj.comments.all(), many=True)
+        return ser.data
