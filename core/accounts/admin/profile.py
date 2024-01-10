@@ -70,16 +70,12 @@ class SkillsAdmin(admin.ModelAdmin):
 class MembershipAdmin(admin.ModelAdmin):
     """Admin View for Skills"""
 
-    list_display = ("membership_type","price")
-    
+    list_display = ("user","sub",'start_date','end_date')
+    search_fields = ("user",)
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     """Admin View for Skills"""
 
-    list_display = ("user_membership","active")
-
-@admin.register(UserMembership)
-class SubscriptionAdmin(admin.ModelAdmin):
-    """Admin View for Skills"""
-
-    list_display = ("user","membership")
+    list_display = ("name","paid",'time')
+    search_fields = ("name",)

@@ -1,6 +1,6 @@
 from django.db import models
-from accounts.models import *
-from blog.api.validators import *
+from core.accounts.models import *
+from core.blog.api.validators import *
 from ckeditor.fields import RichTextField
 
 
@@ -12,9 +12,9 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=100, validators=[validate_tag_title])
+    title = models.CharField(max_length=100, validators=[validate_tag_title()])
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
 
 
@@ -34,7 +34,7 @@ class Blog(models.Model):
     updated_time = models.DateTimeField(auto_now=True, blank=True, null=True)
     is_public = models.BooleanField(default=False)
     need_membership = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.title
 
