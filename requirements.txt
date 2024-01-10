@@ -13,10 +13,16 @@ djangorestframework-simplejwt
 django-cors-headers
 djoser
 django-ckeditor
+django-cors-headers
 #__delployment modules__#
 
 #__email third_party modules__#
 django-mail-templated
 
 #__background proccess and cache__#
+celery
+django-celery-beat
 Redis
+
+#__caching modules__#
+django-redis
