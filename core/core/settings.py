@@ -42,7 +42,8 @@ MODULE = [
     "django_redis",
     "ckeditor",
     "corsheaders",
-    'django_celery_beat'
+    'django_celery_beat',
+    'django_filters',
     
 ]
 
@@ -159,6 +160,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'django_filters.rest_framework.DjangoFilterBackend'
     ],
 }
 

@@ -2,11 +2,21 @@
 from celery import shared_task
 from datetime import datetime
 from accounts.models import *
+from django_celery_beat.models import PeriodicTask
+
 
 @shared_task
 def remove_expired_subscriptions():
-    now = datetime.now()
-    expired_subscriptions = Membership.objects.filter(time__lt=now)
+    """celery task for membership"""
+    membership = Membership.objects.all()
+    if membership.end_date <= datetime.now():
+        for member in membership:
+            member.delete()
 
-    for membership in expired_subscriptions:
-        membership.delete()
+
+@shared_task
+def clean_up_completed_tasks():
+    tasks = PeriodicTask.objects.filter(enabled=False)
+    for task in tasks:
+        task.delete()
+    print("clean_up_completed_tasks completed")

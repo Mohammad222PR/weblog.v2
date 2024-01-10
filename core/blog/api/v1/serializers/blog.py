@@ -77,5 +77,8 @@ class BlogSerializer(serializers.ModelSerializer):
             return None
 
     def get_comment(self, obj):
-        ser = CommentSerializer(instance=obj.comments.all(), many=True)
-        return ser.data
+        try:
+            ser = CommentSerializer(instance=obj.comments.all(), many=True)
+            return ser.data
+        except:
+            return None

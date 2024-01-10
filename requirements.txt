@@ -26,3 +26,6 @@ Redis
 
 #__caching modules__#
 django-redis
+
+#__filliter_backend__#
+django-filter
