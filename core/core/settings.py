@@ -44,6 +44,8 @@ MODULE = [
     "corsheaders",
     'django_celery_beat',
     'django_filters',
+    "coreapi",
+    "core",
     
 ]
 
