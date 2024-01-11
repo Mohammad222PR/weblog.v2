@@ -1,4 +1,7 @@
 from rest_framework import generics
+from rest_framework.views import APIView
+from accounts.models import *
+from accounts.models import Membership
 from ..serializers import *
 from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
@@ -18,6 +21,23 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         queryset = self.get_queryset()
         obj = queryset.get(user=self.request.user)
         return obj
+
+
+class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser,)
+
+    def put(self, request):
+        profile = Profile.objects.get(user=request.user)
+        serializer = ProfileSerializers(
+            instance=profile, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                data={"details": "your profile update successfully"},
+                status=status.HTTP_200_OK,
+            )
 
 
 class MembershipView(generics.GenericAPIView):

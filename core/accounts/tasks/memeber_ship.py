@@ -12,6 +12,7 @@ def remove_expired_subscriptions():
     if membership.end_date <= datetime.now():
         for member in membership:
             member.delete()
+            print('Removed membership')
 
 
 @shared_task

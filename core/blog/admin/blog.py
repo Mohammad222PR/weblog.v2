@@ -21,7 +21,7 @@ class BlogAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     '''Admin View for Blog'''
-    list_display = ('user','title','message','parent','created_time','is_public')
+    list_display = ('blog','user','title','message','parent','created_time','is_public')
     list_filter = ('created_time','is_public')
     search_fields = ('title','parent','is_public')
     ordering = ('created_time','is_public')

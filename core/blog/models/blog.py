@@ -1,7 +1,7 @@
 from django.db import models
-from core.accounts.models import *
-from core.blog.api.validators import *
+from accounts.models import *
 from ckeditor.fields import RichTextField
+from blog.api.validators import *
 
 
 class Category(models.Model):
@@ -12,7 +12,7 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=100, validators=[validate_tag_title()])
+    title = models.CharField(max_length=100, validators=[validate_tag_title])
 
     def __str__(self):
         return self.title
@@ -44,7 +44,8 @@ class Blog(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     title = models.CharField(max_length=200)
     message = models.TextField(max_length=200)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
