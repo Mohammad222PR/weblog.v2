@@ -5,6 +5,9 @@ djangorestframework
 Pillow
 django-cleanup
 
+#__development modules__#
+gunicorn
+
 #__third party modules__#
 markdown       
 django-filter
@@ -12,12 +15,20 @@ drf-yasg[validation]
 djangorestframework-simplejwt
 django-cors-headers
 djoser
-django-ckeditor
-django-cors-headers
 #__delployment modules__#
 
 #__email third_party modules__#
 django-mail-templated
+#__refactor and test modules__#
+black
+flake8
+pytest
+pytest-django
+coreapi
+
+#__random data creator__#
+Faker
+
 
 #__background proccess and cache__#
 celery
@@ -27,12 +38,3 @@ Redis
 #__caching modules__#
 django-redis
 
-#__filliter_backend__#
-django-filter
-
-#__test_backend__#
-black 
-flake8
-pytest
-pytest-django
-coreapi
