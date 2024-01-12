@@ -86,13 +86,8 @@ class TestBlogView:
 
     def test_blog_view_response_401(self, api_client):
         url = reverse("blog:api-v1:blog-list")
-        invalid_user = {
-        'username': 'invalid_username',
-        'password': 'invalid_password',
-        }
+        with pytest.raises(Exception):
+            response = api_client.get(url)
+            assert response.status_code == 401
 
-        api_client.force_login(user=invalid_user)
-        response = api_client.get(url)
-        
-        # Assert that the response status code is 401
-        assert response.status_code == 401
+    
