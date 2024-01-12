@@ -86,6 +86,6 @@ class TestBlogView:
 
     def test_blog_view_response_401(self, api_client):
         url = reverse("blog:api-v1:blog-list")
-        
+        api_client.force_login(user={''})
         response = api_client.get(url)
         assert response.status_code == 401
