@@ -9,7 +9,7 @@ from django.urls import reverse
 
 
 @pytest.fixture
-def user():
+def comment_user():
     user = User.objects.create_user(
         email="admin@example.com", username="admin", password="dad12313"
     )
@@ -78,8 +78,14 @@ def api_client():
 class TestBlogView:
     """test blog views"""
 
-    def test_blog_view_response_200(self, api_client, user):
+    def test_blog_view_response_200(self, api_client, comment_user):
         url = reverse("blog:api-v1:blog-list")
-        api_client.force_login(user=user)
+        api_client.force_login(user=comment_user)
         response = api_client.get(url)
         assert response.status_code == 200
+
+    def test_blog_view_response_401(self, api_client):
+        url = reverse("blog:api-v1:blog-list")
+        
+        response = api_client.get(url)
+        assert response.status_code == 401
