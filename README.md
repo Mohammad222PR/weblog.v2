@@ -1,6 +1,6 @@
 <div align='center'>
 
-<img src=https://image.pngaaa.com/387/4169387-middle.png width=100 height=100 />
+<img src=https://image.pngaaa.com/387/4169387-middle.png width=1000 height=1000 />
 
 <h1>API for membership webblog</h1>
 <p>It is an API for blog that uses various themes and libraries This project can help you have a better understanding of design patterns, API writing, load testing, unit testing, background process, etc., and you can help me in further development and optimization.</p>
