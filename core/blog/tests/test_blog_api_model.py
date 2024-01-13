@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime
 from accounts.models import User
-from ..models import *
+from blog.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError
 
@@ -134,7 +134,7 @@ class TestModel_Blog_Tag_Category_Comment:
 
         assert Comment.objects.filter(pk=comment.id).exists()
 
-    def test_comment_vaild_data_parent_is_publick_true(self, blog, user, comment):
+    def test_comment_vaild_data_parent_is_public_true(self, blog, user, comment):
         comment = Comment.objects.create(
             user=user,
             blog=blog,
@@ -147,7 +147,7 @@ class TestModel_Blog_Tag_Category_Comment:
 
         assert Comment.objects.filter(pk=comment.id).exists()
 
-    def test_comment_vaild_data_parent_is_publick_false(self, blog, user, comment):
+    def test_comment_vaild_data_parent_is_public_false(self, blog, user, comment):
         comment = Comment.objects.create(
             user=user,
             blog=blog,
@@ -160,7 +160,7 @@ class TestModel_Blog_Tag_Category_Comment:
 
         assert Comment.objects.filter(pk=comment.id).exists()
 
-    def test_comment_vaild_data_parent_none_is_publick_false(self, blog, user, comment):
+    def test_comment_vaild_data_parent_none_is_public_false(self, blog, user, comment):
         comment = Comment.objects.create(
             user=user,
             blog=blog,

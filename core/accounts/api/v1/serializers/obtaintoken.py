@@ -7,6 +7,7 @@ from rest_framework_simplejwt.serializers import (
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 
+
 class CustomAuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField(label=_("Email"), write_only=True)
     password = serializers.CharField(
@@ -72,12 +73,12 @@ class ChangePasswordSerializer(serializers.Serializer):
         try:
             validate_password(attrs.get("password"))
         except exceptions.ValidationError as e:
-            raise serializers.ValidationError({'password':list(e.message)})
+            raise serializers.ValidationError({"password": list(e.message)})
 
         if not self.user.is_verified:
             raise serializers.ValidationError(
                 {"detail": "User is not verified"},
                 code="authorization",
             )
-        
+
         return super().validate(attrs)

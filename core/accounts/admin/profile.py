@@ -43,7 +43,6 @@ class ProfileAdmin(admin.ModelAdmin):
                 ],
             },
         ),
-
     ]
     search_fields = (
         "username",
@@ -66,16 +65,18 @@ class SkillsAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
 
+
 @admin.register(Membership)
 class MembershipAdmin(admin.ModelAdmin):
     """Admin View for Skills"""
 
-    list_display = ("user","sub",'start_date','end_date')
+    list_display = ("user", "sub", "start_date", "end_date")
     search_fields = ("user",)
+
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     """Admin View for Skills"""
 
-    list_display = ("name","paid",'time')
+    list_display = ("name", "paid", "time")
     search_fields = ("name",)

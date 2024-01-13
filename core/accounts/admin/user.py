@@ -93,7 +93,3 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     ]
-
-
-
-

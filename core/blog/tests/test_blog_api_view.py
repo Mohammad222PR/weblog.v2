@@ -1,9 +1,8 @@
 import pytest
 from datetime import datetime
 from accounts.models import User
-from ..models import *
+from blog.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db import IntegrityError
 from rest_framework.test import APIClient
 from django.urls import reverse
 
@@ -78,7 +77,7 @@ def api_client():
 class TestBlogView:
     """test blog views"""
 
-    def test_blog_view_response_200(self, api_client, comment_user):
+    def test_blog_view_status_200(self, api_client, comment_user):
         url = reverse("blog:api-v1:blog-list")
         api_client.force_login(user=comment_user)
         response = api_client.get(url)
@@ -90,4 +89,64 @@ class TestBlogView:
             response = api_client.get(url)
             assert response.status_code == 401
 
-    
+    def test_blog_view_post_status_200(
+        self, api_client, comment_user, image, category, tag
+    ):
+        url = reverse("blog:api-v1:blog-list")
+        data = {
+            "author": comment_user,
+            "title": "test title",
+            "body": "test body",
+            "slug": "test-body",
+            "image": image,
+            "category": category,
+            "tag": [tag],
+            "created_time": datetime.now(),
+            "updated_time": datetime.now(),
+            "is_public": True,
+            "need_membership": True,
+        }
+        user = comment_user
+        api_client.force_login(user=user)
+        response = api_client.post(url, data)
+        assert response.status_code == 201
+
+    def test_blog_view_invalid_user_post_status_200(
+        self, api_client, comment_user, image, category, tag
+    ):
+        url = reverse("blog:api-v1:blog-list")
+        data = {
+            "author": comment_user,
+            "title": "test title",
+            "body": "test body",
+            "slug": "test-body",
+            "image": image,
+            "category": category,
+            "tag": [tag],
+            "created_time": datetime.now(),
+            "updated_time": datetime.now(),
+            "is_public": True,
+            "need_membership": True,
+        }
+        with pytest.raises(Exception):
+            response = api_client.post(url, data)
+            assert response.status_code == 400
+
+    def test_blog_view_invalid_data_post_status_200(
+        self, api_client, comment_user, image, category, tag
+    ):
+        url = reverse("blog:api-v1:blog-list")
+        data = {}
+        user = comment_user
+        api_client.force_login(user=user)
+        response = api_client.post(url, data)
+        assert response.status_code == 400
+
+    def test_blog_view_invalid_data_and_user_post_status_200(
+        self, api_client, comment_user, image, category, tag
+    ):
+        url = reverse("blog:api-v1:blog-list")
+        data = {}
+        with pytest.raises(Exception):
+            response = api_client.post(url, data)
+            assert response.status_code == 401

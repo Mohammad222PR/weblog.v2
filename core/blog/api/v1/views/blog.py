@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from rest_framework import status
-from blog.models import *
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -10,6 +9,7 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
+from blog.models import *
 from ..serializers import *
 from ...pagination import PaginationClass
 from ..secure import *
@@ -51,8 +51,8 @@ class BlogDetailAndUpdateView(APIView):
     def get(self, request, pk):
         blog = get_object_or_404(Blog, id=pk)
         if (
-                blog.need_membership
-                and not Membership.objects.filter(user=request.user).exists()
+            blog.need_membership
+            and not Membership.objects.filter(user=request.user).exists()
         ):
             return Response(
                 {"detail": "This post requires membership, but you don't have it"},

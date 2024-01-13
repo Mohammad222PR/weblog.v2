@@ -15,7 +15,7 @@ class MembershipSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, attrs):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if Membership.user == request.user:
-            raise serializers.ValidationError('you are have membership')
+            raise serializers.ValidationError("you are have membership")
         return super().validate(attrs)

@@ -5,6 +5,7 @@ from django.core import exceptions
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
 )
+
 User = get_user_model()
 
 
@@ -42,10 +43,9 @@ class ResendActivationCodeSerializers(serializers.Serializer):
 
         except User.DoesNotExist:
             raise serializers.ValidationError({"details": "user does not exist"})
-        
-        if user_obj.is_verified:
-            raise serializers.ValidationError({"details":"you already have verified"})
-        
-        attrs['user'] = user_obj
-        return super().validate(attrs)
 
+        if user_obj.is_verified:
+            raise serializers.ValidationError({"details": "you already have verified"})
+
+        attrs["user"] = user_obj
+        return super().validate(attrs)
