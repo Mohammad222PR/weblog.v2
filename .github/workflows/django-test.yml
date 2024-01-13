@@ -16,3 +16,5 @@ jobs:
         run: docker-compose up -d
       - name: Run Tests
         run: docker exec backend_django sh -c "pytest ."
+      - name: Run Black
+        run: docker exec backend_django sh -c "black ."
