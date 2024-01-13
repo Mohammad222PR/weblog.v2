@@ -45,5 +45,3 @@ class CustomDiscardAuthView(APIView):
             {"detail": "your token delete successfully"},
             status=status.HTTP_204_NO_CONTENT,
         )
-
-

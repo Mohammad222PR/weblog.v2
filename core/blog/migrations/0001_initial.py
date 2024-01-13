@@ -8,7 +8,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,54 +16,136 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Blog',
+            name="Blog",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200, validators=[blog.api.validators.blog.validate_blog_title])),
-                ('body', ckeditor.fields.RichTextField()),
-                ('slug', models.SlugField(max_length=30, validators=[blog.api.validators.blog.validate_blog_slug])),
-                ('image', models.ImageField(upload_to='images/blog/image', validators=[blog.api.validators.blog.validate_file_image])),
-                ('created_time', models.DateTimeField(auto_now_add=True, null=True)),
-                ('updated_time', models.DateTimeField(auto_now=True, null=True)),
-                ('is_public', models.BooleanField(default=False)),
-                ('need_membership', models.BooleanField(default=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blog', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        max_length=200,
+                        validators=[blog.api.validators.blog.validate_blog_title],
+                    ),
+                ),
+                ("body", ckeditor.fields.RichTextField()),
+                (
+                    "slug",
+                    models.SlugField(
+                        max_length=30,
+                        validators=[blog.api.validators.blog.validate_blog_slug],
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        upload_to="images/blog/image",
+                        validators=[blog.api.validators.blog.validate_file_image],
+                    ),
+                ),
+                ("created_time", models.DateTimeField(auto_now_add=True, null=True)),
+                ("updated_time", models.DateTimeField(auto_now=True, null=True)),
+                ("is_public", models.BooleanField(default=False)),
+                ("need_membership", models.BooleanField(default=False)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="blog",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100, validators=[blog.api.validators.blog.validate_tag_title])),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        max_length=100,
+                        validators=[blog.api.validators.blog.validate_tag_title],
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('message', models.TextField(max_length=200)),
-                ('created_time', models.DateTimeField(auto_now_add=True)),
-                ('is_public', models.BooleanField(default=False)),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='blog.comment')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='blog.blog')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("message", models.TextField(max_length=200)),
+                ("created_time", models.DateTimeField(auto_now_add=True)),
+                ("is_public", models.BooleanField(default=False)),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="blog.comment",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="comments",
+                        to="blog.blog",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='blog',
-            name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blog', to='blog.category'),
+            model_name="blog",
+            name="category",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="blog",
+                to="blog.category",
+            ),
         ),
         migrations.AddField(
-            model_name='blog',
-            name='tag',
-            field=models.ManyToManyField(related_name='blog', to='blog.tag'),
+            model_name="blog",
+            name="tag",
+            field=models.ManyToManyField(related_name="blog", to="blog.tag"),
         ),
     ]

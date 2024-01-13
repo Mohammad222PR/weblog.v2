@@ -17,6 +17,7 @@ django-cors-headers
 djoser
 django-ckeditor
 ckeditor
+faker
 #__delployment modules__#
 
 #__email third_party modules__#

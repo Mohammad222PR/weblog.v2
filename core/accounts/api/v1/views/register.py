@@ -113,5 +113,3 @@ class ActivateVerificationView(APIView):
         return Response(
             {"details": "user is verified"}, status=status.HTTP_202_ACCEPTED
         )
-
-
