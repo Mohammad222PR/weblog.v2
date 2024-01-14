@@ -16,7 +16,7 @@ djangorestframework-simplejwt
 django-cors-headers
 djoser
 django-ckeditor
-ckeditor
+
 faker
 #__delployment modules__#
 
