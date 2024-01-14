@@ -38,27 +38,6 @@ def set_end_date(sender, created, instance, **kwargs):
         )
 
 
-class Faktor(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-    sub = models.CharField(max_length=255)
-    paid = models.IntegerField()
-    start_date = models.DateField()
-    end_date = models.DateField()
-
-
-@receiver(post_save, sender=Membership)
-def set_faktor(sender, created, instance, *kwargs):
-    if created:
-        Faktor.objects.create(
-            user = instance.user,
-            sub = instance.sub.name,
-            paid = instance.sub.paid,
-            start_date = instance.start_date,
-            end_date = instance.end_date
-
-        )
-
-
 class Profile(models.Model):
     user = models.ForeignKey(User, verbose_name="user", on_delete=models.CASCADE)
     username = models.CharField(max_length=255)
