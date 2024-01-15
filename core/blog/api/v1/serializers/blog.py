@@ -9,13 +9,21 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostCategorySerializers(serializers.ModelSerializer):
+    url_cat = serializers.SerializerMethodField(source="get_absolute_url")
+
     class Meta:
         model = Category
         fields = "__all__"
 
+    def get_url_cat(self, obj):
+        request = self.context.get("request")
+        if request is not None:
+            return request.build_absolute_uri(obj.pk)
+        return None
+
 
 class PostTagSerializers(serializers.ModelSerializer):
-    url_tag = serializers.SerializerMethodField()
+    url_tag = serializers.SerializerMethodField(source="get_absolute_url")
 
     class Meta:
         model = Tag
@@ -25,8 +33,7 @@ class PostTagSerializers(serializers.ModelSerializer):
         request = self.context.get("request")
         if request is not None:
             return request.build_absolute_uri(obj.pk)
-        else:
-            return None
+        return None
 
 
 class BlogSerializer(serializers.ModelSerializer):

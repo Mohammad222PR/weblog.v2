@@ -14,6 +14,11 @@ urlpatterns = [
         views.TagView.as_view(),
         name="tag-list",
     ),
+    path(
+        "category/list/<int:pk>",
+        views.CategoryView.as_view(),
+        name="tag-list",
+    ),
 ]
 
 router = DefaultRouter()
