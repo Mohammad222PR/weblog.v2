@@ -81,10 +81,22 @@ class BlogDetailAndUpdateView(APIView):
 class TagView(APIView):
     serializer_class = PostTagSerializers
     parser_classes = (MultiPartParser,)
+    pagination_class = PaginationClass
 
     def get(self, request, pk):
         tag = Tag.objects.get(id=pk)
         result = tag.blog.all()
+        serializer = PostTagSerializers(instance=result, many=True, context={'request': request})
+        return Response(serializer.data)
+
+class CategoryView(APIView):
+    serializer_class = PostCategorySerializers
+    parser_classes = (MultiPartParser,)
+    pagination_class = PaginationClass
+
+    def get(self, request, pk):
+        category = Category.objects.get(id=pk)
+        result = category.blog.all()
         serializer = PostTagSerializers(instance=result, many=True, context={'request': request})
         return Response(serializer.data)
 
