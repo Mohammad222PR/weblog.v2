@@ -1,4 +1,5 @@
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from accounts.models import *
 from accounts.models import Membership
@@ -13,13 +14,13 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class ProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = ProfileSerializers
+    queryset = Profile.objects.all()
     permission_classes = [IsAuthenticated]
+    serializer_class = ProfileSerializers
 
-    @method_decorator(cache_page(60))
     def get_object(self):
         queryset = self.get_queryset()
-        obj = queryset.get(user=self.request.user)
+        obj = get_object_or_404(queryset, user=self.request.user)
         return obj
 
 

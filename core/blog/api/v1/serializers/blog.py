@@ -15,9 +15,18 @@ class PostCategorySerializers(serializers.ModelSerializer):
 
 
 class PostTagSerializers(serializers.ModelSerializer):
+    url_tag = serializers.SerializerMethodField()
+
     class Meta:
         model = Tag
         fields = "__all__"
+
+    def get_url_tag(self, obj):
+        request = self.context.get("request")
+        if request is not None:
+            return request.build_absolute_uri(obj.pk)
+        else:
+            return None
 
 
 class BlogSerializer(serializers.ModelSerializer):

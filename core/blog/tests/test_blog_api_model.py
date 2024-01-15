@@ -178,3 +178,4 @@ class TestModel_Blog_Tag_Category_Comment:
             Comment.objects.create(
                 user="dwa",
             )
+

@@ -80,3 +80,12 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     list_display = ("name", "paid", "time")
     search_fields = ("name",)
+
+
+@admin.register(Factor)
+class FactorAdmin(admin.ModelAdmin):
+    list_display = ("user", "sub", "price", "start_date", "end_date")
+    search_fields = ("user",)
+    list_filter = ["start_date", "end_date"]
+    readonly_fields = ["user", "sub", "price", "start_date", "end_date"]
+    ordering = ["start_date", "end_date"]

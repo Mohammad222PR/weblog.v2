@@ -24,8 +24,8 @@ class Subscription(models.Model):
 
 
 class Membership(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-    sub = models.OneToOneField(Subscription, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE, related_name='membership')
+    sub = models.ForeignKey(Subscription, on_delete=models.CASCADE)
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(auto_now=True)
 
@@ -36,6 +36,31 @@ def set_end_date(sender, created, instance, **kwargs):
         Membership.objects.update(
             end_date=instance.start_date + timedelta(days=int(instance.sub.time))
         )
+
+
+class Factor(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    sub = models.CharField(max_length=200)
+    price = models.IntegerField()
+    start_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=Membership)
+def create_factor_membership(sender, created, instance, **kwargs):
+    if created:
+        Factor.objects.create(
+            user=instance.user,
+            sub=instance.sub.name,
+            start_date=instance.start_date,
+            price=instance.sub.paid
+        )
+    Factor.objects.update(
+        end_date=instance.start_date + timedelta(days=int(instance.sub.time))
+    )
 
 
 class Profile(models.Model):

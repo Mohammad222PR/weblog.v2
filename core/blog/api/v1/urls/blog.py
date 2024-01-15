@@ -9,6 +9,11 @@ urlpatterns = [
         views.BlogDetailAndUpdateView.as_view(),
         name="blog-detail-and-update",
     ),
+    path(
+        "tag/list/<int:pk>",
+        views.TagView.as_view(),
+        name="tag-list",
+    ),
 ]
 
 router = DefaultRouter()

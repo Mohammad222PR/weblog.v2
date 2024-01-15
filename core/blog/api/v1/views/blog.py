@@ -16,7 +16,6 @@ from ..secure import *
 from rest_framework.viewsets import ModelViewSet
 
 
-@method_decorator(cache_page(60), name="get")
 class BlogListAndCreateView(generics.ListCreateAPIView):
     serializer_class = BlogSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -51,8 +50,8 @@ class BlogDetailAndUpdateView(APIView):
     def get(self, request, pk):
         blog = get_object_or_404(Blog, id=pk)
         if (
-            blog.need_membership
-            and not Membership.objects.filter(user=request.user).exists()
+                blog.need_membership
+                and not Membership.objects.filter(user=request.user).exists()
         ):
             return Response(
                 {"detail": "This post requires membership, but you don't have it"},
@@ -78,6 +77,16 @@ class BlogDetailAndUpdateView(APIView):
             status=status.HTTP_202_ACCEPTED,
         )
 
+
+class TagView(APIView):
+    serializer_class = PostTagSerializers
+    parser_classes = (MultiPartParser,)
+
+    def get(self, request, pk):
+        tag = Tag.objects.get(id=pk)
+        result = tag.blog.all()
+        serializer = PostTagSerializers(instance=result, many=True, context={'request': request})
+        return Response(serializer.data)
 
 class CommentView(ModelViewSet):
     serializer_class = CommentSerializer
