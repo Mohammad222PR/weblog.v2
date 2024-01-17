@@ -133,8 +133,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
 STATICFILES_DIRS = [
     BASE_DIR / "staticfiles",
 ]
@@ -153,9 +155,10 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "django_filters.rest_framework.DjangoFilterBackend",
     ],
+
 }
+
 
 # __REDIS_CONFIG__#
 CACHES = {

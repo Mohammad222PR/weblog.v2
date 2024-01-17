@@ -74,7 +74,7 @@ class BlogDetailAndUpdateView(APIView):
         blog.delete()
         return Response(
             data={"success": "Your blog was deleted successfully"},
-            status=status.HTTP_202_ACCEPTED,
+            status=status.HTTP_202_ACCEPTED
         )
 
 
@@ -101,13 +101,14 @@ class CategoryView(APIView):
         serializer = PostTagSerializers(instance=result, many=True, context={'request': request})
         return Response(serializer.data)
 
-
-class CommentView(ModelViewSet):
-    serializer_class = CommentSerializer
-    parser_classes = (MultiPartParser,)
-    permission_classes = [IsAuthenticated, IsCommentOwner]
-    pagination_class = PaginationClass
-
-    def get_queryset(self):
-        user_comment = Comment.objects.filter(user=self.request.user)
-        return user_comment
+# class CommentView(ModelViewSet):
+#     serializer_class = CommentSerializer
+#     parser_classes = (MultiPartParser,)
+#     permission_classes = [IsAuthenticated, IsCommentOwner]
+#
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:
+#             user_comment = Comment.objects.filter(user=self.request.user)
+#             return user_comment
+#         else:
+#             return Comment.objects.none()

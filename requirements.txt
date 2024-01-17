@@ -10,7 +10,7 @@ gunicorn
 
 #__third party modules__#
 markdown       
-
+django-filter
 drf-yasg[validation]
 djangorestframework-simplejwt
 django-cors-headers
