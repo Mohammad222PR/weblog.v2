@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 from blog.models import *
 from ..serializers import *
 from ...pagination import PaginationClass
-from ..secure import *
+from ..permissions import *
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -89,6 +89,7 @@ class TagView(APIView):
         serializer = PostTagSerializers(instance=result, many=True, context={'request': request})
         return Response(serializer.data)
 
+
 class CategoryView(APIView):
     serializer_class = PostCategorySerializers
     parser_classes = (MultiPartParser,)
@@ -99,6 +100,7 @@ class CategoryView(APIView):
         result = category.blog.all()
         serializer = PostTagSerializers(instance=result, many=True, context={'request': request})
         return Response(serializer.data)
+
 
 class CommentView(ModelViewSet):
     serializer_class = CommentSerializer
