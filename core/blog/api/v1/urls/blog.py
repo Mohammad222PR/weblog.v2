@@ -21,7 +21,7 @@ urlpatterns = [
     ),
 ]
 
-router = DefaultRouter()
-router.register(r"comment", views.CommentView, basename="comment")
-
-urlpatterns += router.urls
+# router = DefaultRouter()
+# router.register(r"comment", views.CommentView, basename="comment")
+#
+# urlpatterns += router.urls
