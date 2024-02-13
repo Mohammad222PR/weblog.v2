@@ -62,12 +62,16 @@ class BlogDetailAndUpdateView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
-        blog = get_object_or_404(Blog, id=pk)
-        serializer = BlogSerializer(instance=blog, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            blog = get_object_or_404(Blog, id=pk)
+            if not blog:
+                return Response({'detail': 'Blog does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            serializers = self.serializer_class(data=request.data, instance=blog, partial=True)
+            if serializers.is_valid(raise_exception=True):
+                serializers.save()
+                return Response({'detail': f'Your blog {blog.title} updated'}, status=status.HTTP_200_OK)
+        except:
+            return Response({'detail': 'blog updated not work please try again'}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         blog = get_object_or_404(Blog, id=pk)
